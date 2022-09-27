@@ -1,0 +1,9 @@
+com\example\todoapp\controller\AuthController.class
+com\example\todoapp\repository\RoleRepository.class
+com\example\todoapp\services\UserServiceImpl.class
+com\example\todoapp\services\UserService.class
+com\example\todoapp\entity\Role.class
+com\example\todoapp\entity\User.class
+com\example\todoapp\repository\UserRepository.class
+com\example\todoapp\TodoAppApplication.class
+com\example\todoapp\dto\UserDto.class
