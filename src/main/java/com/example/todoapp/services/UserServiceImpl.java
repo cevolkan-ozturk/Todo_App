@@ -5,11 +5,19 @@ import com.example.todoapp.entity.Role;
 import com.example.todoapp.entity.User;
 import com.example.todoapp.repository.RoleRepository;
 import com.example.todoapp.repository.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,16 +27,51 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
-    //private static BCryptPasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        //this.passwordEncoder = passwordEncoder;
     }
 
 
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
 
+        if(user == null){
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+
+    }
+
+    //authority role for user
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+        return roles.stream().map(role ->
+                new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public User findByUserId(int userId)
+    {
+       Optional<User> optinalUser = userRepository.findById(userId);
+
+       if(optinalUser.isPresent())
+       {
+           return optinalUser.get();
+       }
+       else {
+           User user = new User();
+           return  user;
+       }
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        userRepository.deleteById(userId);
+    }
 
     @Override
     public void saveUser (UserDto userDto) {
@@ -63,6 +106,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public List<User> getAllUsers() {
+     List<User> users = userRepository.findAll();
+     return users;
+
+    }
+
     private UserDto mapToUserDto (User user){
         UserDto userDto = new UserDto();
         String[] str = user.getUsername().split(" ");
@@ -77,5 +127,23 @@ public class UserServiceImpl implements UserService {
         Role role = new Role();
         role.setName("ROLE_ADMIN");
         return roleRepository.save(role);
+    }
+
+    @Override
+    @Transactional
+    public int getLoggedUserId() {
+        User user = userRepository.findByUsername(loggedUserEmail());
+        return user.getId();
+    }
+
+    //get current logged user email using security user details principal
+    private String loggedUserEmail(){
+        Object principal = SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails){
+            return ((UserDetails) principal).getUsername();
+        }
+
+        return principal.toString();
     }
 }

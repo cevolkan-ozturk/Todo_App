@@ -18,13 +18,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Long id;
+    @Column
+    private int id;
 
     @Column(name = "username",nullable = false)
     private String username;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
-            joinColumns =  @JoinColumn(name = "user_id"),
+            joinColumns =  @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles = new ArrayList<>();

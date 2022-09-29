@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS 'user';
-CREATE TABLE 'user'
+DROP TABLE IF EXISTS 'users';
+CREATE TABLE 'users'
 (
-'user_id' int NOT NULL AUTO_INCREMENT,
-'user_username' varchar(45) DEFAULT NULL,
-'user_email' varchar(45) DEFAULT NULL,
-'user_password' varchar(60) DEFAULT NULL,
-PRIMARY KEY ('user_id'),
-UNIQUE KEY `client_email_UNIQUE` (`user_email`)
+'id' int NOT NULL AUTO_INCREMENT,
+'username' varchar(45) DEFAULT NULL,
+'email' varchar(45) DEFAULT NULL,
+'password' varchar(60) DEFAULT NULL,
+PRIMARY KEY ('id'),
+UNIQUE KEY `client_email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

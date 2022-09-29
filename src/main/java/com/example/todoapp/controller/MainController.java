@@ -2,8 +2,6 @@ package com.example.todoapp.controller;
 
 
 import com.example.todoapp.dto.UserDto;
-import com.example.todoapp.entity.User;
-import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +14,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-public class AuthController {
+public class MainController {
 
     private UserService userService;
 
-    public AuthController(UserService userService) {
+    public MainController(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,6 +26,11 @@ public class AuthController {
     public String home() {
 
         return "index";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
     }
 
 
