@@ -33,6 +33,11 @@ public class MainController {
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String homen() {
+        return "index";
+    }
+
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
