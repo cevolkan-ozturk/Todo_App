@@ -1,30 +1,52 @@
-package com.example.todoapp.entity;
+package com.example.todoapp.models;
 
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users")
+@Data
+@Builder
+@Table(name="user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @Column(name = "username",nullable = false)
-    private String username;
 
-    public int getId() {
+    @Column(name = "username")
+    private String firstname;
+
+    @Column(name = "username")
+    private String lastname;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name= "email")
+    private String email;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<TodoItem> todoItems = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns =
+    @JoinColumn(name = "role_id", referencedColumnName = "id"))
+
+    private Collection<Role> roles;
+
+
+   /* public int getId() {
         return id;
     }
 
@@ -44,11 +66,6 @@ public class User {
         return roles;
     }
 
-    @Column(name = "password",nullable = false)
-    private String password;
-
-    @Column(name= "email",nullable = false)
-    private String email;
 
    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
    @JoinTable(name = "users_roles",
@@ -65,6 +82,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email ;
-    }
+    }*/
 }
 

@@ -1,10 +1,12 @@
 package com.example.todoapp.services;
 
 import com.example.todoapp.dto.UserDto;
-import com.example.todoapp.entity.Role;
-import com.example.todoapp.entity.User;
+import com.example.todoapp.models.Role;
+import com.example.todoapp.models.User;
 import com.example.todoapp.repository.RoleRepository;
 import com.example.todoapp.repository.UserRepository;
+import com.example.todoapp.request.UserRegistrationRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,20 +23,45 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
+    public User save(UserRegistrationRequest userRegistrationRequest) {
+        User user = new User();
+        user.setFirstname(userRegistrationRequest.getFirstName());
+        user.setLastname(userRegistrationRequest.getLastName());
+        user.setEmail(userRegistrationRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()));
+        user.setRoles(Arrays.asList(new Role("ROLE_USER")));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username);
+        if(user == null) {
+            throw new UsernameNotFoundException("Invalid Username or Password");
+        }
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+
+    /*@Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
@@ -145,5 +172,8 @@ public class UserServiceImpl implements UserService {
         }
 
         return principal.toString();
+    }*/
+
+
     }
-}
+

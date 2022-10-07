@@ -1,6 +1,6 @@
-package com.example.todoapp.security;
+package com.example.todoapp.configuration;
 
-import com.example.todoapp.entity.User;
+import com.example.todoapp.models.User;
 import com.example.todoapp.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

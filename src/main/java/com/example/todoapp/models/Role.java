@@ -1,16 +1,13 @@
-package com.example.todoapp.entity;
+package com.example.todoapp.models;
 
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,22 +17,27 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    //@Column(name = "role_id")
     private Long id;
 
-    @Column(name = "role_name")
+    //@Column(name = "role_name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users = new ArrayList<>();
+    public Role(String name) {
+        super();
+        this.name = name;
+    }
 
+    //@ManyToMany(mappedBy = "roles")
+    //private List<User> users = new ArrayList<>();
 
+/**/
 
-    @Override
+   /* @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
-    }
+    }*/
 }
