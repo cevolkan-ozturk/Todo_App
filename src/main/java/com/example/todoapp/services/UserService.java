@@ -1,6 +1,6 @@
 package com.example.todoapp.services;
 
-import com.example.todoapp.dto.UserDto;
+
 import com.example.todoapp.models.User;
 import com.example.todoapp.request.UserRegistrationRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,25 +1,20 @@
 package com.example.todoapp.services;
 
-import com.example.todoapp.dto.UserDto;
+
 import com.example.todoapp.models.Role;
 import com.example.todoapp.models.User;
-import com.example.todoapp.repository.RoleRepository;
 import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.request.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

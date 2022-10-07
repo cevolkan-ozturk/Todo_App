@@ -1,7 +1,7 @@
 package com.example.todoapp.models;
 
 import javax.persistence.*;
-
+import org.hibernate.annotations.Fetch;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -14,7 +14,9 @@ import java.util.List;
 @Entity
 @Data
 @Builder
-@Table(name="user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Getter
+@Setter
+@Table(name="users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id

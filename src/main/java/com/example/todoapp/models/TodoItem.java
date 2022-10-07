@@ -1,9 +1,7 @@
 package com.example.todoapp.models;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +10,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 
 public class TodoItem {
 
@@ -25,7 +25,5 @@ public class TodoItem {
 
     @Column(name="completed")
     private Boolean completed =Boolean.FALSE;
-
-
 
 }
